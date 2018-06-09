@@ -66,9 +66,9 @@ def handleIncomingPost():
     return "OK",200
 
 
-def send_text_message(sender, message_text):
+def send_text_message(user_id, message_text):
 
-    log("sending message to {recipient}: {text}".format(recipient=sender, text=message_text))
+    log("sending message to {recipient}: {text}".format(recipient=user_id, text=message_text))
 
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
@@ -78,7 +78,7 @@ def send_text_message(sender, message_text):
     }
     data = json.dumps({
         "recipient": {
-            "id": sender
+            "id": user_id
         },
         "message": {
             "text": message_text
@@ -90,7 +90,7 @@ def send_text_message(sender, message_text):
         log(r.text)
 
 
-def send_templates(sender, elements, template_type = "generic"):
+def send_templates(user_id, elements, template_type = "generic"):
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -100,7 +100,7 @@ def send_templates(sender, elements, template_type = "generic"):
 
     data = json.dumps({
         "recipient": {
-            "id": sender
+            "id": user_id
         },
         "message": {
             "attachment": {
@@ -118,7 +118,7 @@ def send_templates(sender, elements, template_type = "generic"):
         log(r.text)
 
 
-def send_quick_replies(sender, message, elements):
+def send_quick_replies(user_id, message, elements):
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -127,7 +127,7 @@ def send_quick_replies(sender, message, elements):
     }
     data = json.dumps({
         "recipient": {
-            "id": sender
+            "id": user_id
         },
         "message": {
             "text": message,
@@ -140,7 +140,7 @@ def send_quick_replies(sender, message, elements):
         log(r.text)
 
 
-def send_buttoned_messages(sender,message,elements):
+def send_buttoned_messages(user_id,message,elements):
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -149,7 +149,7 @@ def send_buttoned_messages(sender,message,elements):
     }
     data = json.dumps({
         "recipient": {
-            "id": sender
+            "id": user_id
         },
         "message": {
             "attachment": {
@@ -166,7 +166,7 @@ def send_buttoned_messages(sender,message,elements):
 
 
 
-def send_attachment(sender, file_types, url):
+def send_attachment(user_id, file_types, url):
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -175,7 +175,7 @@ def send_attachment(sender, file_types, url):
     }
     data = json.dumps({
         "recipient":{
-    "id":sender
+    "id":user_id
        },
     "message":{
     "attachment":{
