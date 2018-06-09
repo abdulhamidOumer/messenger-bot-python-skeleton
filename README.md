@@ -55,7 +55,7 @@ The function takes three basic parameters, the first one being the user_id of th
   "payload":"<DEVELOPER_DEFINED_PAYLOAD>"
  },
 {
-  "content_type":"location"  // FOR lOCATION
+  "content_type":"location"  # FOR lOCATION
 }
 ]
 ```
