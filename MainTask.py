@@ -9,6 +9,7 @@ import random
 
 from flask import Flask , request
 
+
 app = Flask(__name__)
 
 
@@ -89,7 +90,7 @@ def send_text_message(sender, message_text):
         log(r.text)
 
 
-def send_templates(sender, elements):
+def send_templates(sender, elements, template_type = "generic"):
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -105,7 +106,7 @@ def send_templates(sender, elements):
             "attachment": {
                 "type": "template",
                 "payload": {
-                    "template_type": "generic",
+                    "template_type": template_type,
                     "elements": elements
                 }
             }
@@ -164,7 +165,8 @@ def send_buttoned_messages(sender,message,elements):
         log(r.text)
 
 
-def send_voice_message(sender, audio):
+
+def send_attachment(sender, file_types, url):
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -177,35 +179,9 @@ def send_voice_message(sender, audio):
        },
     "message":{
     "attachment":{
-      "type":"audio",
+      "type":file_types,
       "payload":{
-        "url":audio
-      }
-    }
-  }
-    })
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
-    if r.status_code != 200:
-        log(r.status_code)
-        log(r.text)
-
-
-def send_image(sender, image):
-    params = {
-        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    data = json.dumps({
-        "recipient":{
-    "id":sender
-       },
-    "message":{
-    "attachment":{
-      "type":"image",
-      "payload":{
-        "url":image
+        "url":url
       }
     }
   }
@@ -274,7 +250,7 @@ def set_whitelist_domains():
     print "White listed Domains!!"
 
 
-def set_greeting_text():
+def set_greeting_text(text):    ## Set a greeting text to user that will be visible before sending message
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -285,7 +261,7 @@ def set_greeting_text():
         "greeting":[
         {
             "locale":"default",
-            "text":"Hello! {{user_first_name}}. Welcome to My Sample Bot"
+            "text": text
          }
        ]
     })
@@ -296,7 +272,7 @@ def set_greeting_text():
         log(r.text)
 
 
-def set_get_started_button():
+def set_get_started_button():  ## Set a get started button, that's avialable the first time user makes contact
     params = {
         "access_token": os.environ["PAGE_ACCESS_TOKEN"]
     }
@@ -322,7 +298,9 @@ def log(message):  # simple wrapper for logging to stdout on heroku
 
 
 def handle_incoming_text(sender_id, message):
-   print "User said: "+message
+   response = "User said: "+message
+   send_text_message(sender_id, response)
+   log(response)
 
 
 def handle_incoming_postbacks(payload, sender):
